@@ -1,0 +1,15 @@
+.notFound {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.notFound__img {
+  width: 200px;
+}
+
+.notFound__text {
+  margin-top: 5px;
+  text-align: center;
+}
