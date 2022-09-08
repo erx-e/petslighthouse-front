@@ -54,6 +54,7 @@ export class UploaderComponent {
       if (this.updating) {
         this.imgsUrlUpdating = this.imgsUrlUpdating.filter((imgg) => {
           if (imgg.url != img.url) return imgg;
+
         });
         this.changeUpdate.emit(this.imgsUrlUpdating);
       } else {
