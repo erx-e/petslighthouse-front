@@ -2,19 +2,19 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpStatusCode,
-} from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, throwError } from "rxjs";
-import { tap, switchMap, catchError } from "rxjs/operators";
-import { environment } from "src/environments/environment";
-import { authUser, UserView, authUserResponse } from "../models/user.model";
-import { TokenService } from "./token.service";
-import { checkToken } from "../interceptors/token.interceptor";
-import { Router } from "@angular/router";
-import { Location } from "@angular/common";
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { tap, switchMap, catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { authUser, UserView, authUserResponse } from '../models/user.model';
+import { TokenService } from './token.service';
+import { checkToken } from '../interceptors/token.interceptor';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
   constructor(
@@ -35,8 +35,8 @@ export class AuthService {
     if (token) {
       this.getProfile().subscribe();
       console.log(this.router.url);
-      if (this.location.isCurrentPathEqualTo("/")) {
-        this.router.navigate(["/home"]);
+      if (this.location.isCurrentPathEqualTo('/')) {
+        this.router.navigate(['/home']);
       }
     }
   }
@@ -48,13 +48,16 @@ export class AuthService {
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          if(error.status === HttpStatusCode.BadRequest){
-            return throwError("El email o contraseña estan incorrectos")
+          if (error.status === HttpStatusCode.BadRequest) {
+            return throwError('El email o contraseña estan incorrectos');
           }
+          console.log(error);
+          return throwError('El email o contraseña estan incorrectos');
         }),
         tap((response) => {
           this.user.next(response.user);
-          this.tokenService.saveToken(response.token)})
+          this.tokenService.saveToken(response.token);
+        })
       );
   }
 
@@ -73,9 +76,9 @@ export class AuthService {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.Unauthorized) {
-            return throwError("No estas autorizado");
+            return throwError('No estas autorizado');
           }
-          return throwError("Bad request");
+          return throwError('Bad request');
         }),
         tap((user) => this.user.next(user))
       );
