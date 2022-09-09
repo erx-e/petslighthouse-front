@@ -156,12 +156,11 @@ export class PublishComponent implements OnInit {
   }
 
   crearPost() {
-    if (this.stateId == "E") {
+    if (this.stateId == "E" || this.stateId == "A") {
       this.petNameField.clearValidators();
       this.petNameField.updateValueAndValidity();
     }
-    if (this.form.valid && this.imgUrls.length > 0) {
-
+    if (this.user && this.form.valid && this.imgUrls.length > 0) {
 
         this.createdPost = this.form.value;
 

@@ -6,6 +6,7 @@
   <div class="formBox">
     <form [formGroup]="form" (ngSubmit)="crearPost()">
       <div class="form-container">
+        <p class="validateUser" *ngIf="user">*Necesitas tener una cuenta para hacer una publicación</p>
         <div class="form-element-section">
           <p>Indique las caracteristicas de la mascota</p>
           <div class="flex">
