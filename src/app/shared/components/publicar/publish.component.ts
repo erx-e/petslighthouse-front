@@ -1,36 +1,33 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
-} from "@angular/forms";
-import {
-  createImgDTO,
-  CreatePostpetDTO,
-} from "src/app/models/postpet.model";
-import { Location } from "@angular/common";
-import { CategoryService } from "src/app/services/category.service";
+} from '@angular/forms';
+import { createImgDTO, CreatePostpetDTO } from 'src/app/models/postpet.model';
+import { Location } from '@angular/common';
+import { CategoryService } from 'src/app/services/category.service';
 import {
   breed,
   canton,
   provincia,
   sector,
   specie,
-} from "../../../models/category.model";
-import { switchMap } from "rxjs/operators";
-import { PostpetService } from "src/app/services/postpet.service";
-import { environment } from "src/environments/environment";
-import { AuthService } from "src/app/services/auth.service";
-import { UserView } from "src/app/models/user.model";
-import { MyValidators } from "src/app/validators/validators";
-import { Observable, of } from "rxjs";
+} from '../../../models/category.model';
+import { switchMap } from 'rxjs/operators';
+import { PostpetService } from 'src/app/services/postpet.service';
+import { environment } from 'src/environments/environment';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserView } from 'src/app/models/user.model';
+import { MyValidators } from 'src/app/validators/validators';
+import { Observable, of } from 'rxjs';
 
 @Component({
-  selector: "app-publish",
-  templateUrl: "./publish.component.html",
-  styleUrls: ["./publish.component.scss"],
+  selector: 'app-publish',
+  templateUrl: './publish.component.html',
+  styleUrls: ['./publish.component.scss'],
 })
 export class PublishComponent implements OnInit {
   constructor(
@@ -43,8 +40,7 @@ export class PublishComponent implements OnInit {
     this.buildForm();
   }
 
-
-  @Input() stateId: string = "";
+  @Input() stateId: string = '';
 
   published: boolean = false;
 
@@ -66,7 +62,7 @@ export class PublishComponent implements OnInit {
     description: null,
     reward: null,
     urlImgs: null,
-    linkMapSeen: null
+    linkMapSeen: null,
   };
   species: specie[] = [];
   specieId: number;
@@ -81,14 +77,10 @@ export class PublishComponent implements OnInit {
 
   imgUrls: string[] = [];
 
-
   disableSubmit: boolean = false;
   maxSixFiles: boolean = false;
 
-
-
   maxFourContactNumbers: boolean = false;
-
 
   ngOnInit(): void {
     this.authService.user$.subscribe((data) => (this.user = data));
@@ -99,12 +91,20 @@ export class PublishComponent implements OnInit {
     this.getProvincias();
     this.getCantonesByProv();
     this.getSectoresByCanton();
+    if (this.stateId == 'E' || this.stateId == 'A') {
+      this.petNameField.clearValidators();
+      this.petNameField.updateValueAndValidity();
+    }
+    if (this.stateId == 'A' || this.stateId == 'H') {
+      this.lastTimeSeenField.clearValidators();
+      this.lastTimeSeenField.updateValueAndValidity();
+    }
   }
 
   private buildForm() {
     this.form = this.formBuilder.group({
       petName: [
-        "",
+        '',
         [
           Validators.required,
           Validators.minLength(2),
@@ -112,25 +112,25 @@ export class PublishComponent implements OnInit {
           Validators.pattern(/^[Aa-zA-ZáéíóúÁÉÍÓÚÑñ ]*$/),
         ],
       ],
-      idPetSpecie: ["", Validators.required],
-      idPetBreed: [{ value: "", disabled: true }, Validators.required],
-      petAge: [""],
-      petSpecialCondition: [""],
+      idPetSpecie: ['', Validators.required],
+      idPetBreed: [{ value: '', disabled: true }, Validators.required],
+      petAge: [''],
+      petSpecialCondition: [''],
       contact: this.formBuilder.array([
-        new FormControl("", [
+        new FormControl('', [
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(10),
           Validators.pattern(/^[0-9]*$/),
         ]),
       ]),
-      reward: ["", [Validators.min(0), Validators.max(100000)]],
-      idProvincia: ["", Validators.required],
-      idCanton: [{ value: "", disabled: true }, Validators.required],
-      idSector: [""],
-      description: ["", Validators.required],
-      lastTimeSeen: ["", [Validators.required, MyValidators.correctDate]],
-      urlImgs: [""],
+      reward: ['', [Validators.min(0), Validators.max(100000)]],
+      idProvincia: ['', Validators.required],
+      idCanton: [{ value: '', disabled: true }, Validators.required],
+      idSector: [''],
+      description: ['', Validators.required],
+      lastTimeSeen: ['', [Validators.required, MyValidators.correctDate]],
+      urlImgs: [''],
     });
   }
 
@@ -144,52 +144,48 @@ export class PublishComponent implements OnInit {
   }
 
   private CreateContactField() {
-    return new FormControl("", [
+    return new FormControl('', [
       Validators.minLength(10),
       Validators.maxLength(10),
       Validators.pattern(/^[0-9]*$/),
     ]);
   }
 
-  goBack(){
+  goBack() {
     this.location.back();
   }
 
   crearPost() {
-    if (this.stateId == "E" || this.stateId == "A") {
-      this.petNameField.clearValidators();
-      this.petNameField.updateValueAndValidity();
-    }
     if (this.user && this.form.valid && this.imgUrls.length > 0) {
+      this.createdPost = this.form.value;
 
-        this.createdPost = this.form.value;
+      this.createdPost.urlImgs = this.imgUrls.map((url) => {
+        return { url: url } as createImgDTO;
+      });
+      this.createdPost.contact = this.contactField.value.join(' ');
+      this.createdPost.idUser = this.user.idUser;
 
-        this.createdPost.urlImgs = this.imgUrls.map(url => {
-          return {url: url} as createImgDTO
-        } );
-        this.createdPost.contact = this.contactField.value.join(" ");
-        this.createdPost.idUser = this.user.idUser;
-
-        this.createdPost.idState = this.stateId;
-        this.published = true;
-        this.postpetService.create(this.createdPost).subscribe(() => {
-          this.location.back();
-        });
-    }
-    else{
+      this.createdPost.idState = this.stateId;
+      this.published = true;
+      this.postpetService.create(this.createdPost).subscribe(() => {
+        this.location.back();
+      });
+    } else {
       this.published = false;
     }
 
+    console.log(this.form.valid);
+    console.log(this.form);
     this.form.markAllAsTouched();
   }
 
-  onUrlsChange(event: string[]){
-    this.imgUrls =  event;
+  onUrlsChange(event: string[]) {
+    this.imgUrls = event;
   }
 
   toggleDisabledBreed() {
     this.petSpecieField.valueChanges.subscribe(() => {
-      if (this.petSpecieField.hasError("required")) {
+      if (this.petSpecieField.hasError('required')) {
         this.disableBreedField();
       } else {
         this.enableBreedField();
@@ -202,7 +198,7 @@ export class PublishComponent implements OnInit {
       if (this.provinciaField.value) {
         this.cantonField.enable();
       } else {
-        this.cantonField.setValue("");
+        this.cantonField.setValue('');
         this.cantonField.disable();
       }
     });
@@ -268,12 +264,12 @@ export class PublishComponent implements OnInit {
       });
   }
 
-  onLimit(event: boolean){
+  onLimit(event: boolean) {
     this.maxSixFiles = event;
   }
 
   get petNameField() {
-    return this.form.get("petName");
+    return this.form.get('petName');
   }
 
   get petNameFieldValid() {
@@ -285,7 +281,7 @@ export class PublishComponent implements OnInit {
   }
 
   get petSpecieField() {
-    return this.form.get("idPetSpecie");
+    return this.form.get('idPetSpecie');
   }
 
   get petSpecieFieldValid() {
@@ -297,7 +293,7 @@ export class PublishComponent implements OnInit {
   }
 
   get petBreedField() {
-    return this.form.get("idPetBreed");
+    return this.form.get('idPetBreed');
   }
 
   get petBreedFieldValid() {
@@ -309,7 +305,7 @@ export class PublishComponent implements OnInit {
   }
 
   get provinciaField() {
-    return this.form.get("idProvincia");
+    return this.form.get('idProvincia');
   }
 
   get provinciaFieldValid() {
@@ -321,7 +317,7 @@ export class PublishComponent implements OnInit {
   }
 
   get cantonField() {
-    return this.form.get("idCanton");
+    return this.form.get('idCanton');
   }
 
   get cantonFieldValid() {
@@ -333,11 +329,11 @@ export class PublishComponent implements OnInit {
   }
 
   get sectorField() {
-    return this.form.get("idSector");
+    return this.form.get('idSector');
   }
 
   get descriptionField() {
-    return this.form.get("description");
+    return this.form.get('description');
   }
 
   get descriptionFieldValid() {
@@ -349,7 +345,7 @@ export class PublishComponent implements OnInit {
   }
 
   get rewardField() {
-    return this.form.get("reward");
+    return this.form.get('reward');
   }
 
   get rewardFieldValid() {
@@ -361,7 +357,7 @@ export class PublishComponent implements OnInit {
   }
 
   get lastTimeSeenField() {
-    return this.form.get("lastTimeSeen");
+    return this.form.get('lastTimeSeen');
   }
 
   get lastTimeSeenFieldValid() {
@@ -373,7 +369,7 @@ export class PublishComponent implements OnInit {
   }
 
   get urlImgsField() {
-    return this.form.get("urlImgs");
+    return this.form.get('urlImgs');
   }
 
   get urlImgsFieldValid() {
@@ -392,7 +388,7 @@ export class PublishComponent implements OnInit {
   }
 
   get petAgeField() {
-    return this.form.get("petAge");
+    return this.form.get('petAge');
   }
 
   get petAgeFieldValid() {
@@ -404,11 +400,11 @@ export class PublishComponent implements OnInit {
   }
 
   get petSpecialConditionField() {
-    return this.form.get("petSpecialCondition");
+    return this.form.get('petSpecialCondition');
   }
 
   get contactField() {
-    return this.form.get("contact") as FormArray;
+    return this.form.get('contact') as FormArray;
   }
 
   // get contactFieldValid() {
