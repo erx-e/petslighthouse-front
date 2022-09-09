@@ -5,5 +5,5 @@ import { Component } from "@angular/core";
   template: ` <app-editar [stateId]="stateId"></app-editar>`,
 })
 export class EditarComponent {
-  stateId = "B";
+  stateId = "E";
 }
