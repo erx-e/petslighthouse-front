@@ -104,7 +104,7 @@ export class PublishComponent implements OnInit {
   private buildForm() {
     this.form = this.formBuilder.group({
       petName: [
-        '',
+        null,
         [
           Validators.required,
           Validators.minLength(2),
@@ -114,8 +114,8 @@ export class PublishComponent implements OnInit {
       ],
       idPetSpecie: ['', Validators.required],
       idPetBreed: [{ value: '', disabled: true }, Validators.required],
-      petAge: [''],
-      petSpecialCondition: [''],
+      petAge: [null],
+      petSpecialCondition: [null],
       contact: this.formBuilder.array([
         new FormControl('', [
           Validators.required,
@@ -127,9 +127,9 @@ export class PublishComponent implements OnInit {
       reward: [null, [Validators.min(0), Validators.max(100000)]],
       idProvincia: ['', Validators.required],
       idCanton: [{ value: '', disabled: true }, Validators.required],
-      idSector: [''],
+      idSector: [null],
       description: ['', Validators.required],
-      lastTimeSeen: ['', [Validators.required, MyValidators.correctDate]],
+      lastTimeSeen: [null, [Validators.required, MyValidators.correctDate]],
       urlImgs: [''],
     });
   }

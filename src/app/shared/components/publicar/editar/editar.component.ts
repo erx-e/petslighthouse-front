@@ -107,6 +107,14 @@ export class EditarComponent implements OnInit {
           this.urlImgsField.updateValueAndValidity();
         }
       });
+      if (this.stateId == 'E' || this.stateId == 'A') {
+        this.petNameField.clearValidators();
+        this.petNameField.updateValueAndValidity();
+      }
+      if (this.stateId == 'A' || this.stateId == 'H') {
+        this.lastTimeSeenField.clearValidators();
+        this.lastTimeSeenField.updateValueAndValidity();
+      }
   }
 
   form: FormGroup;
@@ -160,7 +168,7 @@ export class EditarComponent implements OnInit {
   private buildForm() {
     this.form = this.formBuilder.group({
       petName: [
-        "",
+        null,
         [
           Validators.required,
           Validators.minLength(2),
@@ -170,8 +178,8 @@ export class EditarComponent implements OnInit {
       ],
       idPetSpecie: ["", Validators.required],
       idPetBreed: [{ value: "", disabled: true }, Validators.required],
-      petAge: [""],
-      petSpecialCondition: [""],
+      petAge: [null],
+      petSpecialCondition: [null],
       contact: this.formBuilder.array([
         new FormControl("", [
           Validators.required,
@@ -180,12 +188,12 @@ export class EditarComponent implements OnInit {
           Validators.pattern(/^[0-9]*$/),
         ]),
       ]),
-      reward: ["", [Validators.min(0), Validators.max(100000)]],
+      reward: [null, [Validators.min(0), Validators.max(100000)]],
       idProvincia: ["", Validators.required],
       idCanton: [{ value: "", disabled: true }, Validators.required],
-      idSector: [""],
+      idSector: [null],
       description: ["", Validators.required],
-      lastTimeSeen: ["", [Validators.required, MyValidators.correctDate]],
+      lastTimeSeen: [null, [Validators.required, MyValidators.correctDate]],
       urlImgs: [""],
     });
   }
