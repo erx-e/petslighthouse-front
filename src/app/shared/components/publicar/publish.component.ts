@@ -124,7 +124,7 @@ export class PublishComponent implements OnInit {
           Validators.pattern(/^[0-9]*$/),
         ]),
       ]),
-      reward: ['', [Validators.min(0), Validators.max(100000)]],
+      reward: [null, [Validators.min(0), Validators.max(100000)]],
       idProvincia: ['', Validators.required],
       idCanton: [{ value: '', disabled: true }, Validators.required],
       idSector: [''],
