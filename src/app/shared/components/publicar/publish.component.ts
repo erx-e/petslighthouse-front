@@ -77,7 +77,7 @@ export class PublishComponent implements OnInit {
   cantonId: number;
   sectores: sector[] = [];
   dateInvalid: boolean = false;
-  user: UserView;
+  user: UserView = null;
 
   imgUrls: string[] = [];
 
