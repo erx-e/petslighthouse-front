@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  API_URL: 'http://petslighthouseapi-dev.eba-g5eu86dx.us-east-1.elasticbeanstalk.com',
+  API_URL: 'https://petslighthouseapi.online/',
   AWS_REGION: 'us-east-1',
   AWS_KEY_ID: 'AKIA5QZLTSGGAPAN6OAH',
   AWS_KEY_SECRET: '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',
