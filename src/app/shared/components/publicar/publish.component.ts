@@ -127,7 +127,7 @@ export class PublishComponent implements OnInit {
       reward: [null, [Validators.min(0), Validators.max(100000)]],
       idProvincia: ['', Validators.required],
       idCanton: [{ value: '', disabled: true }, Validators.required],
-      idSector: [null],
+      idSector: [''],
       description: ['', Validators.required],
       lastTimeSeen: [null, [Validators.required, MyValidators.correctDate]],
       urlImgs: [''],
@@ -158,6 +158,13 @@ export class PublishComponent implements OnInit {
   crearPost() {
     if (this.user && this.form.valid && this.imgUrls.length > 0) {
       this.createdPost = this.form.value;
+
+      if (!this.sectorField.value) {
+        this.createdPost.idSector = null;
+      }
+      if (!this.rewardField.value) {
+        this.createdPost.reward = null;
+      }
 
       this.createdPost.urlImgs = this.imgUrls.map((url) => {
         return { url: url } as createImgDTO;

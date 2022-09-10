@@ -1,34 +1,34 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
-} from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
+} from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import {
   breed,
   canton,
   provincia,
   sector,
   specie,
-} from "src/app/models/category.model";
-import { UpdatePostpetDTO, updateImg } from "src/app/models/postpet.model";
-import { UserView } from "src/app/models/user.model";
-import { AuthService } from "src/app/services/auth.service";
-import { CategoryService } from "src/app/services/category.service";
-import { PostpetService } from "src/app/services/postpet.service";
-import { environment } from "src/environments/environment";
-import { switchMap } from "rxjs/operators";
-import { MyValidators } from "src/app/validators/validators";
-import { Location } from "@angular/common";
+} from 'src/app/models/category.model';
+import { UpdatePostpetDTO, updateImg } from 'src/app/models/postpet.model';
+import { UserView } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { CategoryService } from 'src/app/services/category.service';
+import { PostpetService } from 'src/app/services/postpet.service';
+import { environment } from 'src/environments/environment';
+import { switchMap } from 'rxjs/operators';
+import { MyValidators } from 'src/app/validators/validators';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: "app-editar",
-  templateUrl: "./editar.component.html",
-  styleUrls: ["./editar.component.scss"],
+  selector: 'app-editar',
+  templateUrl: './editar.component.html',
+  styleUrls: ['./editar.component.scss'],
 })
 export class EditarComponent implements OnInit {
   constructor(
@@ -54,7 +54,7 @@ export class EditarComponent implements OnInit {
     this.router.paramMap
       .pipe(
         switchMap((params) => {
-          this.postpetId = params.get("id");
+          this.postpetId = params.get('id');
           if (this.postpetId) {
             return this.postpetService.getByIdUpdate(parseInt(this.postpetId));
           }
@@ -67,10 +67,10 @@ export class EditarComponent implements OnInit {
           this.petNameField.setValue(this.postpet.petName);
           this.petSpecieField.setValue(this.postpet.idPetSpecie);
           let petSpecie1 = document.getElementById(
-            "especie1"
+            'especie1'
           ) as HTMLInputElement;
           let petSpecie2 = document.getElementById(
-            "especie2"
+            'especie2'
           ) as HTMLInputElement;
           if (petSpecie1.value) {
             petSpecie1.click();
@@ -107,18 +107,18 @@ export class EditarComponent implements OnInit {
           this.urlImgsField.updateValueAndValidity();
         }
       });
-      if (this.stateId == 'E' || this.stateId == 'A') {
-        this.petNameField.clearValidators();
-        this.petNameField.updateValueAndValidity();
-      }
-      if (this.stateId == 'A' || this.stateId == 'H') {
-        this.lastTimeSeenField.clearValidators();
-        this.lastTimeSeenField.updateValueAndValidity();
-      }
+    if (this.stateId == 'E' || this.stateId == 'A') {
+      this.petNameField.clearValidators();
+      this.petNameField.updateValueAndValidity();
+    }
+    if (this.stateId == 'A' || this.stateId == 'H') {
+      this.lastTimeSeenField.clearValidators();
+      this.lastTimeSeenField.updateValueAndValidity();
+    }
   }
 
   form: FormGroup;
-  @Input() stateId: string = "";
+  @Input() stateId: string = '';
 
   published: boolean = false;
 
@@ -176,12 +176,12 @@ export class EditarComponent implements OnInit {
           Validators.pattern(/^[Aa-zA-ZáéíóúÁÉÍÓÚÑñ ]*$/),
         ],
       ],
-      idPetSpecie: ["", Validators.required],
-      idPetBreed: [{ value: "", disabled: true }, Validators.required],
+      idPetSpecie: ['', Validators.required],
+      idPetBreed: [{ value: '', disabled: true }, Validators.required],
       petAge: [null],
       petSpecialCondition: [null],
       contact: this.formBuilder.array([
-        new FormControl("", [
+        new FormControl('', [
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(10),
@@ -189,12 +189,12 @@ export class EditarComponent implements OnInit {
         ]),
       ]),
       reward: [null, [Validators.min(0), Validators.max(100000)]],
-      idProvincia: ["", Validators.required],
-      idCanton: [{ value: "", disabled: true }, Validators.required],
-      idSector: [null],
-      description: ["", Validators.required],
+      idProvincia: ['', Validators.required],
+      idCanton: [{ value: '', disabled: true }, Validators.required],
+      idSector: [''],
+      description: ['', Validators.required],
       lastTimeSeen: [null, [Validators.required, MyValidators.correctDate]],
-      urlImgs: [""],
+      urlImgs: [''],
     });
   }
 
@@ -208,7 +208,7 @@ export class EditarComponent implements OnInit {
   }
 
   private CreateContactField() {
-    return new FormControl("", [
+    return new FormControl('', [
       Validators.minLength(10),
       Validators.maxLength(10),
       Validators.pattern(/^[0-9]*$/),
@@ -216,7 +216,7 @@ export class EditarComponent implements OnInit {
   }
 
   editPost() {
-    if(this.form.valid && this.imgUrls.length > 0){
+    if (this.form.valid && this.imgUrls.length > 0) {
       this.updatePost.idPostPet = this.postpet.idPostPet;
       this.updatePost.petName =
         this.postpet.petName != this.petNameField.value
@@ -257,7 +257,7 @@ export class EditarComponent implements OnInit {
           : null;
       this.updatePost.contact =
         this.contactNumbers != this.contactField.value
-          ? this.contactField.value.join(" ")
+          ? this.contactField.value.join(' ')
           : null;
       this.updatePost.reward =
         this.postpet.reward != this.rewardField.value
@@ -268,6 +268,14 @@ export class EditarComponent implements OnInit {
           ? this.lastTimeSeenField.value
           : this.lastTimeSeenField.value;
 
+      if (!this.updatePost.idSector) {
+        this.updatePost.idSector = null;
+      }
+
+      if (!this.updatePost.reward) {
+        this.updatePost.reward = null;
+      }
+
       this.updatePost.urlImgs = this.imgUrls;
       this.updatePost.idUser = this.user.idUser;
       this.updatePost.idState = this.stateId;
@@ -277,7 +285,7 @@ export class EditarComponent implements OnInit {
         this.location.back();
       });
     }
-    this.form.markAllAsTouched()
+    this.form.markAllAsTouched();
   }
 
   onUrlsChange(event: updateImg[]) {
@@ -287,7 +295,7 @@ export class EditarComponent implements OnInit {
 
   toggleDisabledBreed() {
     this.petSpecieField.valueChanges.subscribe(() => {
-      if (this.petSpecieField.hasError("required")) {
+      if (this.petSpecieField.hasError('required')) {
         this.disableBreedField();
       } else {
         this.enableBreedField();
@@ -300,7 +308,7 @@ export class EditarComponent implements OnInit {
       if (this.provinciaField.value) {
         this.cantonField.enable();
       } else {
-        this.cantonField.setValue("");
+        this.cantonField.setValue('');
         this.cantonField.disable();
       }
     });
@@ -369,7 +377,7 @@ export class EditarComponent implements OnInit {
   }
 
   get petNameField() {
-    return this.form.get("petName");
+    return this.form.get('petName');
   }
 
   get petNameFieldValid() {
@@ -381,7 +389,7 @@ export class EditarComponent implements OnInit {
   }
 
   get petSpecieField() {
-    return this.form.get("idPetSpecie");
+    return this.form.get('idPetSpecie');
   }
 
   get petSpecieFieldValid() {
@@ -393,7 +401,7 @@ export class EditarComponent implements OnInit {
   }
 
   get petBreedField() {
-    return this.form.get("idPetBreed");
+    return this.form.get('idPetBreed');
   }
 
   get petBreedFieldValid() {
@@ -405,7 +413,7 @@ export class EditarComponent implements OnInit {
   }
 
   get provinciaField() {
-    return this.form.get("idProvincia");
+    return this.form.get('idProvincia');
   }
 
   get provinciaFieldValid() {
@@ -417,7 +425,7 @@ export class EditarComponent implements OnInit {
   }
 
   get cantonField() {
-    return this.form.get("idCanton");
+    return this.form.get('idCanton');
   }
 
   get cantonFieldValid() {
@@ -429,11 +437,11 @@ export class EditarComponent implements OnInit {
   }
 
   get sectorField() {
-    return this.form.get("idSector");
+    return this.form.get('idSector');
   }
 
   get descriptionField() {
-    return this.form.get("description");
+    return this.form.get('description');
   }
 
   get descriptionFieldValid() {
@@ -445,7 +453,7 @@ export class EditarComponent implements OnInit {
   }
 
   get rewardField() {
-    return this.form.get("reward");
+    return this.form.get('reward');
   }
 
   get rewardFieldValid() {
@@ -457,7 +465,7 @@ export class EditarComponent implements OnInit {
   }
 
   get lastTimeSeenField() {
-    return this.form.get("lastTimeSeen");
+    return this.form.get('lastTimeSeen');
   }
 
   get lastTimeSeenFieldValid() {
@@ -469,7 +477,7 @@ export class EditarComponent implements OnInit {
   }
 
   get urlImgsField() {
-    return this.form.get("urlImgs");
+    return this.form.get('urlImgs');
   }
 
   get urlImgsFieldValid() {
@@ -488,7 +496,7 @@ export class EditarComponent implements OnInit {
   }
 
   get petAgeField() {
-    return this.form.get("petAge");
+    return this.form.get('petAge');
   }
 
   get petAgeFieldValid() {
@@ -500,10 +508,10 @@ export class EditarComponent implements OnInit {
   }
 
   get petSpecialConditionField() {
-    return this.form.get("petSpecialCondition");
+    return this.form.get('petSpecialCondition');
   }
 
   get contactField() {
-    return this.form.get("contact") as FormArray;
+    return this.form.get('contact') as FormArray;
   }
 }
