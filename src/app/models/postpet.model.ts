@@ -15,7 +15,7 @@ export interface postpetView {
   sectorName: string | null;
   description: string;
   reward: number | null;
-  lastTimeSeen: string;
+  lastTimeSeen: string | null;
   linkMapSeen: string | null;
   urlImgs: img[];
 }
@@ -34,7 +34,7 @@ export interface CreatePostpetDTO {
   idSector: number | null;
   description: string;
   reward: number | null;
-  lastTimeSeen: string;
+  lastTimeSeen: string | null;
   linkMapSeen: string | null;
   urlImgs: createImgDTO[];
 }
