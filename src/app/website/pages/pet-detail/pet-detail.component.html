@@ -201,6 +201,19 @@
                 >.
               </p>
             </div>
+            <div *ngIf="postpet.contact">
+              <h3 class="data__question">Medio de contacto</h3>
+              <p>
+                Contactame conmigo con
+                <span *ngIf="contactNum.length > 1; else otherNumber"
+                  >los siguientes números</span
+                >
+                <ng-template #otherNumber>
+                  <span>el siguiente número</span> </ng-template
+                >:
+                {{ postpet.contact }}
+              </p>
+            </div>
             <div>
               <h3 class="data__question">
                 Más detalles acerca de mi situación
