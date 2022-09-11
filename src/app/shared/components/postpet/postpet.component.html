@@ -11,9 +11,15 @@
     </div>
   </div>
   <div class="postpet-info">
-    <p>
+    <p *ngIf="postpet.petName">
+      Nombre: {{postpet.petName}}
+    </p>
+    <p *ngIf="postpet.petStateId == 'B' || postpet.petStateId == 'E'">
       Visto por ultima vez en {{ postpet.cantonName | titlecase }},
       {{ postpet.provinciaName | titlecase }}<span *ngIf="postpet.lastTimeSeen">, {{ lastTimeSeen }}</span>
+    </p>
+    <p *ngIf="postpet.petStateId == 'A' || postpet.petStateId == 'H'">
+      Se encuentra en {{ postpet.cantonName | titlecase }}, {{ postpet.provinciaName | titlecase }}
     </p>
     <p *ngIf="postpet.petBreed">Raza: {{ postpet.petBreed }}</p>
     <div *ngIf="postpet.petStateId == 'B'">

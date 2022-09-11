@@ -97,27 +97,40 @@
                 >: {{ postpet.contact }}
               </p>
             </div>
+            <div>
+              <h3 class="data__question">
+                Más detalles acerca de mi situación
+              </h3>
+              <p>
+                {{ postpet?.description }}
+              </p>
+            </div>
           </div>
           <div *ngIf="postpet.petStateId == 'B'">
-            <h3 class="data__question">Acerca de mí</h3>
-            <p *ngIf="postpet?.petName">
-              Mi nombre es {{ postpet?.petName }} y estoy siendo buscado por mi
-              dueño
-              <a [routerLink]="['/profile', postpet.idUser]">{{
-                postpet.userName
-              }}</a
-              >.
-              <span *ngIf="postpet.petBreed"
-                >Soy un {{ postpet.petBreed }}</span
-              >
-              <span *ngIf="postpet.petAge"> de {{ postpet.petAge }}</span>
-            </p>
+            <div>
+              <h3 class="data__question">Acerca de mí</h3>
+              <p *ngIf="postpet?.petName">
+                Mi nombre es {{ postpet?.petName }} y estoy siendo buscado por
+                mi dueño
+                <a [routerLink]="['/profile', postpet.idUser]">{{
+                  postpet.userName
+                }}</a
+                >.
+                <span *ngIf="postpet.petBreed"
+                  >Soy un {{ postpet.petBreed }}</span
+                >
+                <span *ngIf="postpet.petAge"> de {{ postpet.petAge }}</span>
+              </p>
+            </div>
             <div class="petData__direction">
-              Me perdi en {{ postpet?.provinciaName | titlecase }},
-              {{ postpet?.cantonName | titlecase }} el {{ lastTimeSeen }}
+              <h3 class="data__question">¿Dónde y cuando me perdí?</h3>
+              <p>
+                Me perdi en {{ postpet?.provinciaName | titlecase }},
+                {{ postpet?.cantonName | titlecase }} el {{ lastTimeSeen }}
 
-              <p *ngIf="postpet?.sectorName">
-                Sector: {{ postpet?.sectorName | titlecase }}
+                <span *ngIf="postpet?.sectorName">
+                  Sector: {{ postpet?.sectorName | titlecase }}
+                </span>
               </p>
             </div>
             <div *ngIf="postpet.contact">
@@ -133,18 +146,69 @@
                 {{ postpet.contact }}
               </p>
             </div>
+            <div>
+              <h3 class="data__question">Recompensa</h3>
+              <p *ngIf="postpet?.reward; else noReward">
+                Recompensa al que me encuentre: {{ postpet?.reward | currency }}
+              </p>
+              <ng-template #noReward>
+                <p>No existe recompensa</p>
+              </ng-template>
+            </div>
+            <div>
+              <h3 class="data__question">
+                Más detalles acerca de mi situación
+              </h3>
+              <p>
+                {{ postpet?.description }}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 class="data__question">Detalles acerca de mi situación</h3>
-            <p>
-              {{ postpet?.description }}
-            </p>
-          </div>
-          <div>
-            <h3 class="data__question">Recompensa</h3>
-            <p *ngIf="postpet?.reward">
-              Recompensa al que me encuentre: {{ postpet?.reward | currency }}
-            </p>
+          <div *ngIf="postpet.petStateId == 'H' || postpet.petStateId == 'A'">
+            <div>
+              <h3 class="data__question">Acerca de mí</h3>
+              <p *ngIf="postpet?.petName">
+                Mi nombre es {{ postpet?.petName }} y mi dueño es
+                <a [routerLink]="['/profile', postpet.idUser]">{{
+                  postpet.userName
+                }}</a
+                >.
+                <span *ngIf="postpet.petBreed"
+                  >Soy un {{ postpet.petSpecie }} de raza
+                  {{ postpet.petBreed }}</span
+                >
+                <span *ngIf="postpet.petAge">
+                  y mi edad es de {{ postpet.petAge }}</span
+                >
+              </p>
+            </div>
+            <div>
+              <h3 class="data__question">¿En donde me encuentro?</h3>
+              <p>
+                Estoy ubicado en la provincia de {{ postpet.provinciaName }},
+                especificamente en el
+                <span *ngIf="postpet?.sectorName"
+                  >sector
+                  <span class="highlight">{{
+                    postpet?.sectorName | titlecase
+                  }}</span>
+                  del</span
+                >
+                canton
+                <span class="highlight">{{
+                  postpet?.cantonName | titlecase
+                }}</span
+                >.
+              </p>
+            </div>
+            <div>
+              <h3 class="data__question">
+                Más detalles acerca de mi situación
+              </h3>
+              <p>
+                {{ postpet?.description }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
