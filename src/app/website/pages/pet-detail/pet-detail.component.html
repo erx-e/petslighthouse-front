@@ -110,7 +110,7 @@
             <div>
               <h3 class="data__question">Acerca de mí</h3>
               <p *ngIf="postpet?.petName">
-                Mi nombre es {{ postpet?.petName }} y estoy siendo buscado por
+                Mi nombre es {{ postpet?.petName | titlecase}} y estoy siendo buscado por
                 mi dueño
                 <a [routerLink]="['/profile', postpet.idUser]">{{
                   postpet.userName
@@ -119,7 +119,7 @@
                 <span *ngIf="postpet.petBreed"
                   >Soy un {{ postpet.petBreed }}</span
                 >
-                <span *ngIf="postpet.petAge"> de {{ postpet.petAge }}</span>
+                <span *ngIf="postpet.petAge"> de {{ postpet.petAge | lowercase}}</span>
               </p>
             </div>
             <div class="petData__direction">
@@ -168,17 +168,17 @@
             <div>
               <h3 class="data__question">Acerca de mí</h3>
               <p *ngIf="postpet?.petName">
-                Mi nombre es {{ postpet?.petName }} y mi dueño es
+                Mi nombre es {{ postpet?.petName | titlecase}} y mi dueño es
                 <a [routerLink]="['/profile', postpet.idUser]">{{
                   postpet.userName
                 }}</a
                 >.
                 <span *ngIf="postpet.petBreed"
-                  >Soy un {{ postpet.petSpecie }} de raza
+                  >Soy un {{ postpet.petSpecie | lowercase}} de raza
                   {{ postpet.petBreed }}</span
                 >
                 <span *ngIf="postpet.petAge">
-                  y mi edad es de {{ postpet.petAge }}</span
+                  y mi edad es de {{ postpet.petAge | lowercase}}</span
                 >
               </p>
             </div>
