@@ -42,11 +42,15 @@ export class UploadTaskComponent implements OnInit, OnDestroy {
       if (this.file) {
         this.startUpload();
       }
-      this.downloadUrl = this.imgUpdating.url;
-      this.idImg = this.imgUpdating.idImage;
+      else{
+        this.downloadUrl = this.imgUpdating.url;
+        this.idImg = this.imgUpdating.idImage;
+      }
     }
-    if (this.file) {
-      this.startUpload();
+    else{
+      if (this.file) {
+        this.startUpload();
+      }
     }
   }
 
@@ -69,10 +73,10 @@ export class UploadTaskComponent implements OnInit, OnDestroy {
   private bucketUrl: string = environment.BUCKET_URL;
   imgKey: string = "";
 
-  startUpload() {
+  async startUpload() {
     this.imgKey = `${uuidv4()}.${this.file.name.split(".").pop()}`;
     console.log("start");
-    this.s3StorageService
+    await this.s3StorageService
       .uploadImage(this.file, this.imgKey)
       .on("httpUploadProgress", (progress) => {
         this.percentage = Math.round((progress.loaded / progress.total) * 100);
@@ -93,15 +97,31 @@ export class UploadTaskComponent implements OnInit, OnDestroy {
   async deleteImg() {
     this.imgKey = this.downloadUrl.split("/").pop();
     this.isLoading = true;
-
+    console.log(this.published)
+    console.log(this.updating)
     if (!this.published) {
       if (this.updating) {
+        if(this.file){
+          await this.s3StorageService
+          .deleteImg(this.imgKey)
+          .then(() => {
+            this.deleted.emit({ file: this.file, key: this.imgKey });
 
-        this.deletedUpdate.emit({
-          idImage: this.idImg,
-          url: null,
-          file: this.file ? this.file : null,
-        });
+            console.log(`Imagen eliminada ${this.imgKey}`);
+            this.downloadUrl = null;
+            this.isLoading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        }
+        else{
+          this.deletedUpdate.emit({
+            idImage: this.idImg,
+            url: null,
+            file: this.file ? this.file : null,
+          });
+        }
       } else {
         await this.s3StorageService
           .deleteImg(this.imgKey)
