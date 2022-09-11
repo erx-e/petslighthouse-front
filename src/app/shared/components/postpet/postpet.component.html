@@ -6,14 +6,14 @@
           [img]="postpet.urlImgs[0].url"
           [alt]="postpet.petSpecie"
         ></app-image> -->
-        <img class="postpetImg" [src]="postpet.urlImgs[0].url" alt="">
+        <img class="postpetImg" [src]="postpet.urlImgs[0].url" alt="" />
       </a>
     </div>
   </div>
   <div class="postpet-info">
     <p>
       Visto por ultima vez en {{ postpet.cantonName | titlecase }},
-      {{ postpet.provinciaName | titlecase }}, {{ lastTimeSeen }}
+      {{ postpet.provinciaName | titlecase }}<span *ngIf="postpet.lastTimeSeen">, {{ lastTimeSeen }}</span>
     </p>
     <p *ngIf="postpet.petBreed">Raza: {{ postpet.petBreed }}</p>
     <div *ngIf="postpet.petStateId == 'B'">
