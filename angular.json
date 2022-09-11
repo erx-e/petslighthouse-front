@@ -35,6 +35,7 @@
           },
           "configurations": {
             "production": {
+              "optimization": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -64,7 +65,7 @@
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
