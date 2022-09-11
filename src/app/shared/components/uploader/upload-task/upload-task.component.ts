@@ -39,11 +39,11 @@ export class UploadTaskComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.updating) {
-      this.downloadUrl = this.imgUpdating.url;
-      this.idImg = this.imgUpdating.idImage;
       if (this.file) {
         this.startUpload();
       }
+      this.downloadUrl = this.imgUpdating.url;
+      this.idImg = this.imgUpdating.idImage;
     }
     if (this.file) {
       this.startUpload();
