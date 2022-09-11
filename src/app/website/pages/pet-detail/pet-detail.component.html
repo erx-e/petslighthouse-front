@@ -185,7 +185,7 @@
             <div>
               <h3 class="data__question">¿En donde me encuentro?</h3>
               <p>
-                Estoy ubicado en la provincia de {{ postpet.provinciaName }},
+                Estoy ubicado en la provincia de {{ postpet.provinciaName | titlecase}},
                 especificamente en el
                 <span *ngIf="postpet?.sectorName"
                   >sector
