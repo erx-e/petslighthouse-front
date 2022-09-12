@@ -57,7 +57,6 @@ export class FilterComponent implements OnInit {
   filter: boolean = false;
 
   morePostspet: boolean = true;
-  loadingSubscription;
   isLoadingMore: boolean = false;
   private _isLoading: boolean = false;
   get isLoading() {
@@ -65,17 +64,12 @@ export class FilterComponent implements OnInit {
   }
   set isLoading(value: boolean) {
     this._isLoading = value;
-    if (!value) {
-      this.loadingSubscription.unsubscribe();
-    }
   }
   postspetLoading = [null, null, null, null, null, null, null, null];
 
   async ngOnInit(): Promise<void> {
     await this.getPosts();
-    this.loadingSubscription = this.loadingService.isLoading$.subscribe(
-      (data) => (this.isLoading = data)
-    );
+
 
 
     this.getBreedsBySpecie();
@@ -96,6 +90,7 @@ export class FilterComponent implements OnInit {
   }
 
   async getPosts() {
+    this.isLoading = true;
     this.route.queryParamMap.subscribe((params: ParamMap) => {
       this.petSpecieId = null;
       this.petBreedId = null;
@@ -165,6 +160,7 @@ export class FilterComponent implements OnInit {
 
       this.form.markAllAsTouched();
     });
+    this.isLoading = false;
   }
 
   onLoadMore() {
