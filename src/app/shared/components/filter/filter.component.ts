@@ -65,9 +65,9 @@ export class FilterComponent implements OnInit {
   }
   set isLoading(value: boolean) {
     this._isLoading = value;
-    if (!value) {
-      this.loadingSubscription.unsubscribe();
-    }
+    // if (!value) {
+    //   this.loadingSubscription.unsubscribe();
+    // }
   }
   postspetLoading = [null, null, null, null, null, null, null, null];
 
