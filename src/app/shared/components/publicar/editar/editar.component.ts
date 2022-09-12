@@ -294,7 +294,6 @@ export class EditarComponent implements OnInit {
         this.location.back();
       });
     }
-    this.isLoading = false;
     this.form.markAllAsTouched();
   }
 
