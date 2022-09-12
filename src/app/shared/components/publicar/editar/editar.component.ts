@@ -90,13 +90,15 @@ export class EditarComponent implements OnInit {
           this.petSpecialConditionField.setValue(
             this.postpet.petSpecialCondition
           );
-          this.contactNumbers = this.postpet.contact.match(/\S+/g);
-          console.log(this.contactNumbers.length);
-          for (let i = 1; i < this.contactNumbers.length; i++) {
-            console.log(i);
-            this.addContactField();
+          if(this.postpet.contact){
+            this.contactNumbers = this.postpet.contact.match(/\S+/g);
+            console.log(this.contactNumbers.length);
+            for (let i = 1; i < this.contactNumbers.length; i++) {
+              console.log(i);
+              this.addContactField();
+            }
+            this.contactField.patchValue(this.contactNumbers);
           }
-          this.contactField.patchValue(this.contactNumbers);
           this.descriptionField.setValue(this.postpet.description);
           this.lastTimeSeenField.setValue(this.postpet.lastTimeSeen);
           this.imgUrls = this.postpet.urlImgs;
