@@ -199,6 +199,10 @@ export class EditarComponent implements OnInit {
     });
   }
 
+  goBack() {
+    this.location.back();
+  }
+
   addContactField() {
     if (this.contactField.length < 4) {
       this.maxFourContactNumbers = false;

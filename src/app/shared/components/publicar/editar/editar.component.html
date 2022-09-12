@@ -1,6 +1,8 @@
 <main class="main">
-  <p class="title">Publicar mascota</p>
-  <div class="formBox">
+  <div class="titleSection">
+    <button class="backButton" (click)="goBack()">Back</button>
+    <p class="title">Publicar mascota</p>
+  </div>  <div class="formBox">
     <form [formGroup]="form" (ngSubmit)="editPost()">
       <div class="form-container">
         <div class="form-element-section">
