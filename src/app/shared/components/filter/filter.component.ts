@@ -90,7 +90,6 @@ export class FilterComponent implements OnInit {
   }
 
   async getPosts() {
-    this.isLoading = true;
     this.route.queryParamMap.subscribe((params: ParamMap) => {
       this.petSpecieId = null;
       this.petBreedId = null;
@@ -130,6 +129,7 @@ export class FilterComponent implements OnInit {
       }
       this.limit = 12;
       this.offset = 0;
+      this.isLoading = true;
       this.postpetService
         .GetByFilter(
           this.stateId,
