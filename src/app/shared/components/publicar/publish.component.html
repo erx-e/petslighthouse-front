@@ -391,13 +391,13 @@
           </div>
         </div>
         <button class="submit-btn" type="submit" [disabled]="disableSubmit">
-          Publicar mascota
+          <span *ngIf="isLoading; else loading">
+            Publicar mascota
+          </span>
+          <ng-template #loading>
+              <app-spinner></app-spinner>
+          </ng-template>
         </button>
-        <ng-template #editButton>
-          <button class="submit-btn" type="submit" [disabled]="disableSubmit">
-            Editar publicacion
-          </button>
-        </ng-template>
       </div>
     </form>
   </div>

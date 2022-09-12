@@ -3,7 +3,6 @@ import { authUser } from "src/app/models/user.model";
 import { AuthService } from "src/app/services/auth.service";
 import { Router } from "@angular/router";
 import {
-  FormControl,
   Validators,
   FormGroup,
   FormBuilder,

@@ -121,6 +121,7 @@ export class EditarComponent implements OnInit {
   @Input() stateId: string = '';
 
   published: boolean = false;
+  isLoading: boolean = false;
 
   urlBucket = environment.BUCKET_URL;
   species: specie[] = [];
@@ -217,6 +218,7 @@ export class EditarComponent implements OnInit {
 
   editPost() {
     if (this.form.valid && this.imgUrls.length > 0) {
+      this.isLoading = true;
       this.updatePost.idPostPet = this.postpet.idPostPet;
       this.updatePost.petName =
         this.postpet.petName != this.petNameField.value
@@ -282,9 +284,11 @@ export class EditarComponent implements OnInit {
       console.log(this.updatePost);
       this.published = true;
       this.postpetService.update(this.updatePost).subscribe(() => {
+        this.isLoading = false;
         this.location.back();
       });
     }
+    this.isLoading = false;
     this.form.markAllAsTouched();
   }
 

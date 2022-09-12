@@ -382,13 +382,13 @@
           type="submit"
           [disabled]="disableSubmit"
         >
-          Publicar mascota
-        </button>
-        <ng-template #editButton>
-          <button class="submit-btn" type="submit" [disabled]="disableSubmit">
-            Editar publicacion
-          </button>
+        <span *ngIf="!isLoading; else loading">
+          Editar publicación
+        </span>
+        <ng-template #loading>
+          <app-spinner></app-spinner>
         </ng-template>
+        </button>
       </div>
     </form>
   </div>

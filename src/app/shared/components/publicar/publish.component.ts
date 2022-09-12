@@ -43,6 +43,7 @@ export class PublishComponent implements OnInit {
   @Input() stateId: string = '';
 
   published: boolean = false;
+  isLoading: boolean = false;
 
   urlBucket = `${environment.BUCKET_URL}`;
   form: FormGroup;
@@ -157,6 +158,7 @@ export class PublishComponent implements OnInit {
 
   crearPost() {
     if (this.user && this.form.valid && this.imgUrls.length > 0) {
+      this.isLoading = true;
       this.createdPost = this.form.value;
 
       if (!this.sectorField.value) {
@@ -175,14 +177,13 @@ export class PublishComponent implements OnInit {
       this.createdPost.idState = this.stateId;
       this.published = true;
       this.postpetService.create(this.createdPost).subscribe(() => {
+        this.isLoading = false;
         this.location.back();
       });
     } else {
       this.published = false;
     }
-
-    console.log(this.form.valid);
-    console.log(this.form);
+    this.isLoading = false;
     this.form.markAllAsTouched();
   }
 
