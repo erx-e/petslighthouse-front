@@ -10,7 +10,7 @@ import {
 import { switchMap } from 'rxjs/operators';
 import { CategoryService } from 'src/app/services/category.service';
 import { PostpetService } from 'src/app/services/postpet.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MyValidators } from 'src/app/validators/validators';
 import { NoScrollService } from '../../../services/no-scroll.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -51,31 +51,20 @@ export class FilterComponent implements OnInit {
   sectores: sector[] = [];
 
   form: FormGroup;
-  postspet: postpetView[] = [];
+  postspet: postpetView[] = null;
   limit: number = 12;
   offset: number = 0;
   filter: boolean = false;
 
   morePostspet: boolean = true;
-  loadingSubscription;
   isLoadingMore: boolean = false;
-  private _isLoading: boolean = true;
-  get isLoading() {
-    return this._isLoading;
-  }
-  set isLoading(value: boolean) {
-    this._isLoading = value;
-    // if (!value) {
-    //   this.loadingSubscription.unsubscribe();
-    // }
-  }
+
   postspetLoading = [null, null, null, null, null, null, null, null];
 
   async ngOnInit(): Promise<void> {
-    this.loadingSubscription = this.loadingService.isLoading$.subscribe(
-      (data) => (this.isLoading = data)
-    );
-    await this.getPosts();
+
+
+    await this.getPostsByParams();
 
 
     this.getBreedsBySpecie();
@@ -95,7 +84,12 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  async getPosts() {
+  async getPostsByParams(){
+    await this.getParams()
+    await this.getPosts()
+  }
+
+  async getParams() {
     this.route.queryParamMap.subscribe((params: ParamMap) => {
       this.petSpecieId = null;
       this.petBreedId = null;
@@ -135,35 +129,38 @@ export class FilterComponent implements OnInit {
       }
       this.limit = 12;
       this.offset = 0;
-      this.postpetService
-        .GetByFilter(
-          this.stateId,
-          this.petSpecieId,
-          this.petBreedId,
-          this.provinciaId,
-          this.cantonId,
-          this.sectorId,
-          this.userId,
-          this.date,
-          this.order,
-          this.limit,
-          this.offset
-        )
-        .subscribe((data) => {
-          if (data) {
-            this.postspet = data;
-            if (data.length < 12 || data.length > 12) {
-              this.morePostspet = false;
-            } else {
-              this.morePostspet = true;
-            }
-            this.filter = false;
-            this.overflowHidden();
-            this.offset += this.limit;
-          }
-        });
-
       this.form.markAllAsTouched();
+    });
+  }
+
+  async getPosts(){
+    this.postpetService
+    .GetByFilter(
+      this.stateId,
+      this.petSpecieId,
+      this.petBreedId,
+      this.provinciaId,
+      this.cantonId,
+      this.sectorId,
+      this.userId,
+      this.date,
+      this.order,
+      this.limit,
+      this.offset
+    )
+    .subscribe((data) => {
+      this.postspet = []
+      if (data) {
+        this.postspet = data;
+        if (data.length < 12 || data.length > 12) {
+          this.morePostspet = false;
+        } else {
+          this.morePostspet = true;
+        }
+        this.filter = false;
+        this.overflowHidden();
+        this.offset += this.limit;
+      }
     });
   }
 

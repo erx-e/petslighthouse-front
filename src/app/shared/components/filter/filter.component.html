@@ -376,7 +376,7 @@
           >Publica la mascota necesitada de ayuda</span
         >
       </a>
-      <div class="posts" [class.profilePosts] = "userId" *ngIf="!isLoading; else loading">
+      <div class="posts" [class.profilePosts] = "userId" *ngIf="postspet; else loading">
         <div *ngIf="postspet.length > 0; else petsNotFound">
           <app-postspet
             [isLoadingMore]="isLoadingMore"
