@@ -1,25 +1,25 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { postpetView } from "src/app/models/postpet.model";
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { postpetView } from 'src/app/models/postpet.model';
 import {
   breed,
   canton,
   provincia,
   sector,
-} from "../../../models/category.model";
-import { switchMap } from "rxjs/operators";
-import { CategoryService } from "src/app/services/category.service";
-import { PostpetService } from "src/app/services/postpet.service";
-import { Observable } from "rxjs";
-import { MyValidators } from "src/app/validators/validators";
-import { NoScrollService } from "../../../services/no-scroll.service";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { LoadingService } from "src/app/services/loading.service";
+} from '../../../models/category.model';
+import { switchMap } from 'rxjs/operators';
+import { CategoryService } from 'src/app/services/category.service';
+import { PostpetService } from 'src/app/services/postpet.service';
+import { Observable } from 'rxjs';
+import { MyValidators } from 'src/app/validators/validators';
+import { NoScrollService } from '../../../services/no-scroll.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
-  selector: "app-filter",
-  templateUrl: "./filter.component.html",
-  styleUrls: ["./filter.component.scss"],
+  selector: 'app-filter',
+  templateUrl: './filter.component.html',
+  styleUrls: ['./filter.component.scss'],
 })
 export class FilterComponent implements OnInit {
   constructor(
@@ -33,7 +33,7 @@ export class FilterComponent implements OnInit {
     this.buildForm();
   }
 
-  @Input() stateId: string = "";
+  @Input() stateId: string = '';
   @Input() userId: number = null;
 
   petSpecieId: number | null = null;
@@ -71,11 +71,31 @@ export class FilterComponent implements OnInit {
   }
   postspetLoading = [null, null, null, null, null, null, null, null];
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.loadingSubscription = this.loadingService.isLoading$.subscribe(
       (data) => (this.isLoading = data)
     );
 
+    await this.getPosts();
+
+    this.getBreedsBySpecie();
+    this.getProvincias();
+    this.getCantonesByProv();
+    this.getSectoresByCanton();
+    this.toggleDisabledBreed();
+    this.toggleDisabledCanton();
+    this.toggleDisabledSector();
+  }
+
+  overflowHidden() {
+    if (this.filter) {
+      this.noScrollService.noScrollEmit(true);
+    } else {
+      this.noScrollService.noScrollEmit(false);
+    }
+  }
+
+  async getPosts() {
     this.route.queryParamMap.subscribe((params: ParamMap) => {
       this.petSpecieId = null;
       this.petBreedId = null;
@@ -85,33 +105,33 @@ export class FilterComponent implements OnInit {
       this.date = null;
       this.order = null;
 
-      if (parseInt(params.get("especie"))) {
-        this.petSpecieField.setValue(params.get("especie"));
-        this.petSpecieId = parseInt(params.get("especie"));
+      if (parseInt(params.get('especie'))) {
+        this.petSpecieField.setValue(params.get('especie'));
+        this.petSpecieId = parseInt(params.get('especie'));
       }
-      if (parseInt(params.get("raza"))) {
-        this.petBreedField.setValue(params.get("raza"));
-        this.petBreedId = parseInt(params.get("raza"));
+      if (parseInt(params.get('raza'))) {
+        this.petBreedField.setValue(params.get('raza'));
+        this.petBreedId = parseInt(params.get('raza'));
       }
-      if (parseInt(params.get("provincia"))) {
-        this.provinciaField.setValue(params.get("provincia"));
-        this.provinciaId = parseInt(params.get("provincia"));
+      if (parseInt(params.get('provincia'))) {
+        this.provinciaField.setValue(params.get('provincia'));
+        this.provinciaId = parseInt(params.get('provincia'));
       }
-      if (parseInt(params.get("canton"))) {
-        this.cantonField.setValue(params.get("canton"));
-        this.cantonId = parseInt(params.get("canton"));
+      if (parseInt(params.get('canton'))) {
+        this.cantonField.setValue(params.get('canton'));
+        this.cantonId = parseInt(params.get('canton'));
       }
-      if (parseInt(params.get("sector"))) {
-        this.sectorField.setValue(params.get("sector"));
-        this.sectorId = parseInt(params.get("sector"));
+      if (parseInt(params.get('sector'))) {
+        this.sectorField.setValue(params.get('sector'));
+        this.sectorId = parseInt(params.get('sector'));
       }
-      if (parseInt(params.get("fecha"))) {
-        this.lastTimeSeenField.setValue(params.get("fecha"));
-        this.date = params.get("fecha");
+      if (parseInt(params.get('fecha'))) {
+        this.lastTimeSeenField.setValue(params.get('fecha'));
+        this.date = params.get('fecha');
       }
-      if (parseInt(params.get("orden"))) {
-        this.orderField.setValue(params.get("orden"));
-        this.order = parseInt(params.get("orden"));
+      if (parseInt(params.get('orden'))) {
+        this.orderField.setValue(params.get('orden'));
+        this.order = parseInt(params.get('orden'));
       }
       this.limit = 12;
       this.offset = 0;
@@ -145,22 +165,6 @@ export class FilterComponent implements OnInit {
 
       this.form.markAllAsTouched();
     });
-
-    this.getBreedsBySpecie();
-    this.getProvincias();
-    this.getCantonesByProv();
-    this.getSectoresByCanton();
-    this.toggleDisabledBreed();
-    this.toggleDisabledCanton();
-    this.toggleDisabledSector();
-  }
-
-  overflowHidden() {
-    if (this.filter) {
-      this.noScrollService.noScrollEmit(true);
-    } else {
-      this.noScrollService.noScrollEmit(false);
-    }
   }
 
   onLoadMore() {
@@ -196,24 +200,24 @@ export class FilterComponent implements OnInit {
 
   private buildForm() {
     this.form = this.formBuilder.group({
-      idPetSpecie: [""],
-      idPetBreed: [{ value: "", disabled: "true" }],
-      idProvincia: [""],
-      idCanton: [{ value: "", disabled: "true" }],
-      idSector: [{ value: "", disabled: "true" }],
-      lastTimeSeen: ["", MyValidators.correctDate],
-      order: ["0"],
+      idPetSpecie: [''],
+      idPetBreed: [{ value: '', disabled: 'true' }],
+      idProvincia: [''],
+      idCanton: [{ value: '', disabled: 'true' }],
+      idSector: [{ value: '', disabled: 'true' }],
+      lastTimeSeen: ['', MyValidators.correctDate],
+      order: ['0'],
     });
   }
 
   cleanForm() {
-    this.petSpecieField.setValue("");
-    this.petBreedField.setValue("");
-    this.provinciaField.setValue("");
-    this.cantonField.setValue("");
-    this.sectorField.setValue("");
-    this.lastTimeSeenField.setValue("");
-    this.orderField.setValue("0");
+    this.petSpecieField.setValue('');
+    this.petBreedField.setValue('');
+    this.provinciaField.setValue('');
+    this.cantonField.setValue('');
+    this.sectorField.setValue('');
+    this.lastTimeSeenField.setValue('');
+    this.orderField.setValue('0');
   }
 
   toggleFilter() {
@@ -226,11 +230,11 @@ export class FilterComponent implements OnInit {
       if (this.petSpecieField.value) {
         this.petBreedField.enable();
       } else {
-        this.petBreedField.setValue("");
+        this.petBreedField.setValue('');
         this.petBreedField.disable();
       }
       if (this.petBreedField.value) {
-        this.petBreedField.setValue("");
+        this.petBreedField.setValue('');
       }
     });
   }
@@ -240,11 +244,11 @@ export class FilterComponent implements OnInit {
       if (this.provinciaField.value) {
         this.cantonField.enable();
       } else {
-        this.cantonField.setValue("");
+        this.cantonField.setValue('');
         this.cantonField.disable();
       }
       if (this.cantonField.value) {
-        this.cantonField.setValue("");
+        this.cantonField.setValue('');
       }
     });
   }
@@ -254,17 +258,17 @@ export class FilterComponent implements OnInit {
       if (this.cantonField.value) {
         this.sectorField.enable();
       } else {
-        this.sectorField.setValue("");
+        this.sectorField.setValue('');
         this.sectorField.disable();
       }
       if (this.sectorField.value) {
-        this.sectorField.setValue("");
+        this.sectorField.setValue('');
       }
     });
   }
 
   get petSpecieField() {
-    return this.form.get("idPetSpecie");
+    return this.form.get('idPetSpecie');
   }
 
   get petSpecieFieldValid() {
@@ -276,7 +280,7 @@ export class FilterComponent implements OnInit {
   }
 
   get petBreedField() {
-    return this.form.get("idPetBreed");
+    return this.form.get('idPetBreed');
   }
 
   get petBreedFieldValid() {
@@ -288,7 +292,7 @@ export class FilterComponent implements OnInit {
   }
 
   get provinciaField() {
-    return this.form.get("idProvincia");
+    return this.form.get('idProvincia');
   }
 
   get provinciaFieldValid() {
@@ -300,7 +304,7 @@ export class FilterComponent implements OnInit {
   }
 
   get cantonField() {
-    return this.form.get("idCanton");
+    return this.form.get('idCanton');
   }
 
   get cantonFieldValid() {
@@ -312,11 +316,11 @@ export class FilterComponent implements OnInit {
   }
 
   get sectorField() {
-    return this.form.get("idSector");
+    return this.form.get('idSector');
   }
 
   get lastTimeSeenField() {
-    return this.form.get("lastTimeSeen");
+    return this.form.get('lastTimeSeen');
   }
 
   get lastTimeSeenFieldValid() {
@@ -328,7 +332,7 @@ export class FilterComponent implements OnInit {
   }
 
   get orderField() {
-    return this.form.get("order");
+    return this.form.get('order');
   }
 
   private getBreedsBySpecie() {

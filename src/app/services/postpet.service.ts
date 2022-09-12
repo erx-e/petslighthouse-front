@@ -88,7 +88,7 @@ export class PostpetService {
       );
   }
 
-  GetByFilter(
+   GetByFilter(
     stateId?: string,
     petSpecieId?: number | null,
     petBreedId?: number | null,
