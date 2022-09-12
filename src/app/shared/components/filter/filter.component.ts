@@ -58,7 +58,7 @@ export class FilterComponent implements OnInit {
 
   morePostspet: boolean = true;
   isLoadingMore: boolean = false;
-  private _isLoading: boolean = false;
+  private _isLoading: boolean = true;
   get isLoading() {
     return this._isLoading;
   }
