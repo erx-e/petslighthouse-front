@@ -42,14 +42,14 @@ export class EditarComponent implements OnInit {
     this.buildForm();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.authService.user$.subscribe((data) => (this.user = data));
     this.toggleDisabledBreed();
     this.toggleDisabledCanton();
-    this.getSpecies();
+    await this.getSpecies();
     this.getBreedsBySpecie();
-    this.getProvincias();
-    this.getCantonesByProv();
+    await this.getProvincias();
+    await this.getCantonesByProv();
     this.getSectoresByCanton();
     this.router.paramMap
       .pipe(
@@ -332,7 +332,7 @@ export class EditarComponent implements OnInit {
     this.petBreedField.disable();
   }
 
-  private getSpecies() {
+  private async getSpecies() {
     this.categoryService.getSpecies().subscribe((species: specie[]) => {
       this.species = species;
     });
@@ -348,15 +348,15 @@ export class EditarComponent implements OnInit {
       .subscribe((breeds: breed[]) => (this.breeds = breeds));
   }
 
-  private getProvincias() {
-    this.categoryService
+  private async getProvincias() {
+     this.categoryService
       .getProvincias()
       .subscribe((provincias: provincia[]) => {
         this.provincias = provincias;
       });
   }
 
-  private getCantonesByProv() {
+  private async getCantonesByProv() {
     this.provinciaField.valueChanges
       .pipe(
         switchMap((id) => {
