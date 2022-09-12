@@ -72,11 +72,11 @@ export class FilterComponent implements OnInit {
   postspetLoading = [null, null, null, null, null, null, null, null];
 
   async ngOnInit(): Promise<void> {
+    await this.getPosts();
     this.loadingSubscription = this.loadingService.isLoading$.subscribe(
       (data) => (this.isLoading = data)
     );
 
-    await this.getPosts();
 
     this.getBreedsBySpecie();
     this.getProvincias();
