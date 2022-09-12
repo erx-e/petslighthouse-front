@@ -391,7 +391,7 @@
           </div>
         </div>
         <button class="submit-btn" type="submit" [disabled]="disableSubmit">
-          <span *ngIf="isLoading; else loading">
+          <span *ngIf="!isLoading; else loading">
             Publicar mascota
           </span>
           <ng-template #loading>
