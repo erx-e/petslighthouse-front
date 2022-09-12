@@ -183,7 +183,6 @@ export class PublishComponent implements OnInit {
     } else {
       this.published = false;
     }
-    this.isLoading = false;
     this.form.markAllAsTouched();
   }
 

@@ -6,7 +6,9 @@
   <div class="formBox">
     <form [formGroup]="form" (ngSubmit)="crearPost()">
       <div class="form-container">
-        <p class="validateUser" *ngIf="!user">*Necesitas tener una cuenta para hacer una publicación</p>
+        <p class="validateUser" *ngIf="!user">
+          *Necesitas tener una cuenta para hacer una publicación
+        </p>
         <div class="form-element-section">
           <p>Indique las caracteristicas de la mascota</p>
           <div class="flex">
@@ -391,11 +393,9 @@
           </div>
         </div>
         <button class="submit-btn" type="submit" [disabled]="disableSubmit">
-          <span *ngIf="!isLoading; else loading">
-            Publicar mascota
-          </span>
+          <span *ngIf="!isLoading; else loading"> Publicar mascota </span>
           <ng-template #loading>
-              <app-spinner></app-spinner>
+            <app-spinner></app-spinner>
           </ng-template>
         </button>
       </div>
